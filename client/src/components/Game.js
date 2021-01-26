@@ -9,7 +9,8 @@ class Game extends Component  {
         this.state = {
             gameData : [],
             guessedLetters : [],
-            mistakesMade: 0
+            mistakesMade: 0,
+            gameOver: false,
         }
     }
 
@@ -26,6 +27,7 @@ class Game extends Component  {
             this.setState({
                 mistakesMade: res.data.mistakesMade,
                 guessedLetters: res.data.guessedLetters,
+                gameOver: res.data.gameOver,
             })
         })
     }
@@ -45,8 +47,23 @@ class Game extends Component  {
         ));
     }
 
+    handleTryAgain = () => { 
+        axios.get(`/api/game`).then(res => {
+            this.setState({
+                gameData: res.data,
+                guessedLetters: [],
+                mistakesMade: 0,
+                gameOver: false,
+            })
+        })
+    }
+
     render() {
         let gameLetterButtons = this.generateLetterButtons();
+
+        if (this.state.gameOver) {
+            gameLetterButtons = "YOU LOST, WORD TO GUESS WAS: " + this.state.gameData.word 
+        }
 
         return (
             <div className="App">
@@ -55,7 +72,7 @@ class Game extends Component  {
                 <p>Missed guesses: {this.state.mistakesMade} out of {this.state.gameData.maxMistakes} </p>
                 <p> {this.displayWord()} </p>
                 <p>{gameLetterButtons}</p>
-                <button>
+                <button onClick={this.handleTryAgain} hidden={this.state.gameOver ? false : true}>
                     TRY AGAIN 
                 </button> 
             </div>

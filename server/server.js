@@ -21,7 +21,8 @@ app.get('/api/game', (req, res) => {
         word: getRandomWord(),
         mistakesMade: 0,
         maxMistakes: maxMistakes,
-        guessedLetters: [] }
+        guessedLetters: [],
+        gameOver: false }
 
     initialData.push(newGame)
     res.json(newGame)
@@ -35,9 +36,10 @@ app.get('/api/game/:id/:letter', (req, res) => {
     if (gameFound) {
         gameFound.guessedLetters.push(guessedLetter)
         gameFound.mistakesMade = gameFound.mistakesMade + (gameFound.word.includes(guessedLetter) ? 0 : 1)
+        gameFound.gameOver = gameFound.mistakesMade >= maxMistakes
     }
     console.log(initialData)
-    res.json({mistakesMade: gameFound.mistakesMade, guessedLetters: gameFound.guessedLetters})
+    res.json({mistakesMade: gameFound.mistakesMade, guessedLetters: gameFound.guessedLetters, gameOver: gameFound.gameOver})
 })
 
 app.listen(5000, console.log("SERVER RUNNING ON port 5000"))
