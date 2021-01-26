@@ -16,16 +16,28 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/game', (req, res) => {
-    var newGame = { _id: lastId++, word: getRandomWord(), mistakesMade: 0, maxMistakes: maxMistakes }
+    var newGame = {
+        _id: lastId++,
+        word: getRandomWord(),
+        mistakesMade: 0,
+        maxMistakes: maxMistakes,
+        guessedLetters: [] }
+
     initialData.push(newGame)
     res.json(newGame)
 })
 
-app.get('/api/game/:id', (req, res) => {
+app.get('/api/game/:id/:letter', (req, res) => {
     const gameId = parseInt(req.params.id)
+    const guessedLetter = req.params.letter
     const gameFound = initialData.find(u => u._id === gameId);
-    gameFound.mistakesMade = gameFound.mistakesMade + 1;
-    res.json({mistakesMade: gameFound.mistakesMade})
+
+    if (gameFound) {
+        gameFound.guessedLetters.push(guessedLetter)
+        gameFound.mistakesMade = gameFound.mistakesMade + (gameFound.word.includes(guessedLetter) ? 0 : 1)
+    }
+    console.log(initialData)
+    res.json({mistakesMade: gameFound.mistakesMade, guessedLetters: gameFound.guessedLetters})
 })
 
 app.listen(5000, console.log("SERVER RUNNING ON port 5000"))

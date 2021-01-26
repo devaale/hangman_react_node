@@ -8,6 +8,7 @@ class Game extends Component  {
 
         this.state = {
             gameData : [],
+            guessedLetters : [],
             mistakesMade: 0
         }
     }
@@ -20,9 +21,10 @@ class Game extends Component  {
     }
 
     handleClick = () => { 
-        axios.get(`/api/game/${this.state.gameData._id}`).then(res => {
+        axios.get(`/api/game/${this.state.gameData._id}/${'L'}`).then(res => {
             this.setState({
                 mistakesMade: res.data.mistakesMade,
+                guessedLetters: res.data.guessedLetters,
             })
         })
     }
