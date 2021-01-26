@@ -8,6 +8,7 @@ class Game extends Component  {
 
         this.state = {
             gameData : [],
+            mistakesMade: 0
         }
     }
 
@@ -18,16 +19,24 @@ class Game extends Component  {
         })
     }
 
+    handleClick = () => { 
+        axios.get(`/api/game/${this.state.gameData._id}`).then(res => {
+            this.setState({
+                mistakesMade: res.data.mistakesMade,
+            })
+        })
+    }
+
     render() {
 
         return (
             <div className="App">
                 <h1>Hangman Game</h1>
                 <h2>Current word: {this.state.gameData.word} and ID: {this.state.gameData._id}</h2>
-                <p>Missed guesses: X out of Y</p>
-                <p>WORD</p>
+                <p>Missed guesses: {this.state.mistakesMade} out of {this.state.gameData.maxMistakes} </p>
+                <p> { this.state.gameData.word } </p>
                 <p>LETTERS</p>
-                <button> 
+                <button onClick={this.handleClick}>
                     TRY AGAIN 
                 </button> 
             </div>
