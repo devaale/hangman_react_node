@@ -1,0 +1,22 @@
+{
+  "name": "hangman_react_node",
+  "version": "1.0.0",
+  "description": "Node + React Hangman Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devaale/hangman_react_node.git"
+  },
+  "author": "Evaldas Aleksynas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devaale/hangman_react_node/issues"
+  },
+  "homepage": "https://github.com/devaale/hangman_react_node#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
