@@ -11,6 +11,7 @@ class Game extends Component  {
             guessedLetters : [],
             mistakesMade: 0,
             gameOver: false,
+            gameWon: false,
         }
     }
 
@@ -28,6 +29,7 @@ class Game extends Component  {
                 mistakesMade: res.data.mistakesMade,
                 guessedLetters: res.data.guessedLetters,
                 gameOver: res.data.gameOver,
+                gameWon: res.data.gameWon,
             })
         })
     }
@@ -54,6 +56,7 @@ class Game extends Component  {
                 guessedLetters: [],
                 mistakesMade: 0,
                 gameOver: false,
+                gameWon: false,
             })
         })
     }
@@ -65,6 +68,10 @@ class Game extends Component  {
             gameLetterButtons = "YOU LOST, WORD TO GUESS WAS: " + this.state.gameData.word 
         }
 
+        if (this.state.gameWon) {
+            gameLetterButtons = "YOU WON"
+        }
+
         return (
             <div className="App">
                 <h1>Hangman Game</h1>
@@ -72,7 +79,7 @@ class Game extends Component  {
                 <p>Missed guesses: {this.state.mistakesMade} out of {this.state.gameData.maxMistakes} </p>
                 <p> {this.displayWord()} </p>
                 <p>{gameLetterButtons}</p>
-                <button onClick={this.handleTryAgain} hidden={this.state.gameOver ? false : true}>
+                <button onClick={this.handleTryAgain} hidden={(this.state.gameOver || this.state.gameWon) ? false : true}>
                     TRY AGAIN 
                 </button> 
             </div>

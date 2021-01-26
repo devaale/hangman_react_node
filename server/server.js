@@ -11,6 +11,12 @@ var getRandomWord = function() {
     return words_array[Math.floor(Math.random() * words_array.length)]
 }
 
+var countCorrectLetters = function(guessedLetters, word) {
+    var sum = 0;
+    guessedLetters.forEach(letter => sum += (word.toLowerCase().match(new RegExp(letter, "g")) || []).length);
+    return sum
+}
+
 app.get('/', (req, res) => {
     res.send('API IS RUNNING')
 })
@@ -22,7 +28,8 @@ app.get('/api/game', (req, res) => {
         mistakesMade: 0,
         maxMistakes: maxMistakes,
         guessedLetters: [],
-        gameOver: false }
+        gameOver: false,
+        gameWon: false }
 
     initialData.push(newGame)
     res.json(newGame)
@@ -37,9 +44,21 @@ app.get('/api/game/:id/:letter', (req, res) => {
         gameFound.guessedLetters.push(guessedLetter)
         gameFound.mistakesMade = gameFound.mistakesMade + (gameFound.word.includes(guessedLetter) ? 0 : 1)
         gameFound.gameOver = gameFound.mistakesMade >= maxMistakes
+        let correctLetters = countCorrectLetters(gameFound.guessedLetters, gameFound.word)
+        console.log("RAIDES ATSPETOS")
+        console.log(correctLetters)
+        console.log("TURIMAS DYDIS:")
+        console.log(gameFound.word.length)
+        gameFound.gameWon = correctLetters >= gameFound.word.length
+        console.log("ZAIDIMAS LAIMETAS ?")
+        console.log(gameFound.gameWon)
     }
-    console.log(initialData)
-    res.json({mistakesMade: gameFound.mistakesMade, guessedLetters: gameFound.guessedLetters, gameOver: gameFound.gameOver})
+    res.json({
+        mistakesMade: gameFound.mistakesMade,
+        guessedLetters: gameFound.guessedLetters,
+        gameOver: gameFound.gameOver,
+        gameWon: gameFound.gameWon
+    })
 })
 
 app.listen(5000, console.log("SERVER RUNNING ON port 5000"))
