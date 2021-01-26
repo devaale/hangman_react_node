@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import './Game.css';
 
 class Game extends Component  {
 
@@ -43,7 +44,7 @@ class Game extends Component  {
         for(var i=9;++i<36;) alphabet+=i.toString(36)
 
         return alphabet.split("").map(letter => (
-            <button key={letter} value={letter} onClick={this.handleCheckLetter}>
+            <button key={letter} value={letter} onClick={this.handleCheckLetter} disabled={this.state.guessedLetters.includes(letter.toLowerCase())} className="btn-letter">
                 {letter}
             </button>
         ));
@@ -74,12 +75,11 @@ class Game extends Component  {
 
         return (
             <div className="App">
-                <h1>Hangman Game</h1>
-                <h2>Current word: {this.state.gameData.word} and ID: {this.state.gameData._id}</h2>
-                <p>Missed guesses: {this.state.mistakesMade} out of {this.state.gameData.maxMistakes} </p>
-                <p> {this.displayWord()} </p>
-                <p>{gameLetterButtons}</p>
-                <button onClick={this.handleTryAgain} hidden={(this.state.gameOver || this.state.gameWon) ? false : true}>
+                <h1 className="heading-primary">Hangman Game</h1>
+                <p className="guess-info">Missed guesses: {this.state.mistakesMade} out of {this.state.gameData.maxMistakes} </p>
+                <p className="word"> {this.displayWord()} </p>
+                <p className={(this.state.gameOver || this.state.gameWon) ? "ending game-over" : "end game-won"}> {gameLetterButtons} </p>
+                <button className="btn-try" onClick={this.handleTryAgain} hidden={(this.state.gameOver || this.state.gameWon) ? false : true}>
                     TRY AGAIN 
                 </button> 
             </div>

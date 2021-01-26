@@ -42,16 +42,11 @@ app.get('/api/game/:id/:letter', (req, res) => {
 
     if (gameFound) {
         gameFound.guessedLetters.push(guessedLetter)
-        gameFound.mistakesMade = gameFound.mistakesMade + (gameFound.word.includes(guessedLetter) ? 0 : 1)
+        var wordLowerCase = gameFound.word.toLowerCase()
+        gameFound.mistakesMade = gameFound.mistakesMade + (wordLowerCase.includes(guessedLetter) ? 0 : 1)
         gameFound.gameOver = gameFound.mistakesMade >= maxMistakes
         let correctLetters = countCorrectLetters(gameFound.guessedLetters, gameFound.word)
-        console.log("RAIDES ATSPETOS")
-        console.log(correctLetters)
-        console.log("TURIMAS DYDIS:")
-        console.log(gameFound.word.length)
         gameFound.gameWon = correctLetters >= gameFound.word.length
-        console.log("ZAIDIMAS LAIMETAS ?")
-        console.log(gameFound.gameWon)
     }
     res.json({
         mistakesMade: gameFound.mistakesMade,
